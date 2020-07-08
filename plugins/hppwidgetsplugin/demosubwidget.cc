@@ -78,7 +78,7 @@ namespace hpp {
         main->osg()->deleteNode(*it, 1);
       }
 
-      // Reinite the osg component
+      // Reinit the osg component
       main->osg()->createScene("gepetto-gui");
       main->osg()->createScene("hpp-gui");
       main->osg()->createGroup("joints");

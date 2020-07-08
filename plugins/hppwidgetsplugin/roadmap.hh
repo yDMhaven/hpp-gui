@@ -33,7 +33,7 @@ namespace hpp {
 
         /// You can call this function several times. It will continue displaying the roadmap
         /// where it stopped.
-        void displayRoadmap ();
+        void displayRoadmap (bool do_refresh=1);
 
         /// This function is called before anything else.
         /// You should save the current configuration in this function
