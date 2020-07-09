@@ -368,7 +368,7 @@ namespace hpp {
         if (i % 10 == 0){  // Only refresh any X operation
           wsm->refresh();
         }
-        ++i; 
+        ++i;
         if (interrupt) break;
       } while (!isSolved);
       if (isSolved)
