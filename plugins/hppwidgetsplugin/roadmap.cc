@@ -34,7 +34,7 @@ namespace hpp {
 
       try {
         gepetto::gui::WindowsManagerPtr_t wsm = gepetto::gui::MainWindow::instance()->osg();
-        wsm->createScene (roadmapName().c_str());
+        wsm->createScene (roadmapName ().c_str());
         wsm->addToGroup (roadmapName (), "hpp-gui");
       } catch (const gepetto::Error&) {
         qDebug () << "Roadmap" <<
