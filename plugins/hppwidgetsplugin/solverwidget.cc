@@ -87,6 +87,14 @@ namespace hpp {
       cb->setCurrentIndex(cb->findText(names[0].in()));
     }
 
+    void SolverWidget::updateOptimier (){
+      names = plugin_->client()->problem()->getAvailable("PathOptimizer");
+      optimizers_.clear();
+      for (CORBA::ULong i = 0; i < names->length(); ++i)
+        // Had hard condition for Reeds Shep
+        optimizers_ << QString::fromLocal8Bit(names[i]);
+    }
+
     void SolverWidget::update (Select s) {
       hpp::Names_t_var names;
       switch (s) {
@@ -100,10 +108,7 @@ namespace hpp {
           if (s == Planner) break;
           // fall through
         case Optimizer:
-          names = plugin_->client()->problem()->getAvailable("PathOptimizer");
-          optimizers_.clear();
-          for (CORBA::ULong i = 0; i < names->length(); ++i)
-            optimizers_ << QString::fromLocal8Bit(names[i]);
+          updateOptimier();
           if (s == Optimizer) break;
           // fall through
         case Validation:
@@ -144,6 +149,9 @@ namespace hpp {
     void SolverWidget::selectPathOptimizers (const QStringList& list) {
       plugin_->client()->problem()->clearPathOptimizers();
       foreach(QString s, list)
+        hpp::Names_t_var names = plugin_->client()->problem()->getSelected(what.toStdString().c_str());
+
+
         plugin_->client()->problem()->addPathOptimizer (s.toStdString().c_str());
     }
 
@@ -182,12 +190,14 @@ namespace hpp {
 
       // Add the lineEdits with their respective labels
       QListWidget* list = new QListWidget (&dialog);
+      updateOptimizers();
       list->addItems(optimizers_);
       list->setSelectionMode(QAbstractItemView::ExtendedSelection);
       lay.addWidget(list);
 
       hpp::Names_t_var names = plugin_->client()->problem()->getSelected("PathOptimizer");
       for (unsigned i = 0; i < names->length(); ++i) {
+        // Add hard condition for Reeds Shep
         int index = optimizers_.indexOf(QRegExp(names[i].in()));
 
         list->item(index)->setSelected(true);
