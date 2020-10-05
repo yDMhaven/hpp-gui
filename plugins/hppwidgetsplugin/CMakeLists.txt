@@ -78,8 +78,8 @@ GEPETTO_GUI_PLUGIN(hppwidgetsplugin
   demosubwidget.cc
 
   LINK_DEPENDENCIES
-  ${Boost_LIBRARIES}
   ${TinyXML_LIBRARY}
+  "Boost::thread" "Boost::regex" "Boost::system"
   "hpp-corbaserver::hpp-corbaserver"
   "gepetto-viewer-corba::gepetto-viewer-corba"
   )
