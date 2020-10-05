@@ -31,7 +31,7 @@ namespace hpp {
       int nbCC = hpp->problem()->numberConnectedComponents();
       nodeColorMap_ = gepetto::gui::ColorMap (nbCC + 10);
       edgeColorMap_ = gepetto::gui::ColorMap (nbCC + 10);
-      
+
       std::string pn = roadmapName();
       
       gepetto::gui::WindowsManagerPtr_t wsm = gepetto::gui::MainWindow::instance()->osg();
@@ -54,7 +54,7 @@ namespace hpp {
       initRoadmap();
     }
 
-    void Roadmap::displayRoadmap ()
+    void Roadmap::displayRoadmap (bool do_refresh)
     {
       std::size_t nbNodes = numberNodes ();
       std::size_t nbEdges = numberEdges();
@@ -83,8 +83,10 @@ namespace hpp {
         std::string name = edgeName (currentEdgeId_);
         wsm->addLine(name, pos1, pos2, color);
       }
+      if (do_refresh){
+        wsm->refresh();
+      }
       afterDisplay ();
-      wsm->refresh();
     }
 
     void Roadmap::beforeDisplay ()

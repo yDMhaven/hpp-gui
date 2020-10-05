@@ -344,15 +344,36 @@ namespace hpp {
 				 "Please, select a joint in the joint tree window.");
         return;
       }
-      isSolved = hpp->problem()->prepareSolveStepByStep();
+      gepetto::gui::WindowsManagerPtr_t wsm = MainWindow::instance()->osg();
+
       Roadmap* r = plugin->createRoadmap(jn);
-      while (!isSolved) {
+      isSolved = hpp->problem()->prepareSolveStepByStep();
+      int nbCC = hpp->problem()->numberConnectedComponents();
+      int i = 0;
+
+      do {
         isSolved = hpp->problem()->executeOneStep();
-        r->displayRoadmap();
+
+        if (i && i%10 == 0) {
+          int new_nbCC = hpp->problem()->numberConnectedComponents();
+          if (new_nbCC != nbCC) {
+            // Restart to display connect component merging
+            nbCC = new_nbCC;
+            wsm->deleteNode(r->roadmapName().c_str(), 1);
+            delete r;
+            r = plugin->createRoadmap(jn);
+          }
+        }
+        r->displayRoadmap(0);
+        if (i % 10 == 0){  // Only refresh any X operation
+          wsm->refresh();
+        }
+        ++i; 
         if (interrupt) break;
-      }
+      } while (!isSolved);
       if (isSolved)
         hpp->problem()->finishSolveStepByStep();
+      wsm->refresh();
       delete r;
     }
 
